@@ -1,0 +1,30 @@
+# 노드 모듈
+node_modules/
+npm-debug.log
+
+# 환경 변수
+.env
+
+# 로그 파일
+logs/
+*.log
+
+# 운영체제 파일
+.DS_Store
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 데이터베이스 파일
+data/*.db-journal
+
+# IDE 파일
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 배포 관련
+dist/
+build/ 

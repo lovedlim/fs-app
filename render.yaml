@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: financial-statement-app
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: OPEN_DART_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1 

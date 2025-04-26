@@ -1,0 +1,109 @@
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f8f9fa;
+}
+
+.card {
+  border-radius: 10px;
+  border: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  color: #343a40;
+  font-weight: 600;
+}
+
+.search-results {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.company-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.company-code {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+.statement-type-badge {
+  font-size: 0.8rem;
+  vertical-align: middle;
+  font-weight: 500;
+}
+
+table th {
+  background-color: #f8f9fa;
+}
+
+.table-responsive {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-item {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-item:hover {
+  background-color: #f8f9fa;
+}
+
+.search-item .stock-code {
+  color: #6c757d;
+  font-size: 0.85em;
+}
+
+.financial-value {
+  font-weight: 500;
+}
+
+.positive {
+  color: #198754;
+}
+
+.negative {
+  color: #dc3545;
+}
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 400px;
+}
+
+.btn-primary {
+  background-color: #4361ee;
+  border-color: #4361ee;
+}
+
+.btn-primary:hover {
+  background-color: #3f37c9;
+  border-color: #3f37c9;
+}
+
+@media (max-width: 768px) {
+  .report-selector .d-flex {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+  
+  .report-selector .ms-3 {
+    margin-left: 0 !important;
+    margin-top: 1rem;
+  }
+} 
