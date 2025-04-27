@@ -269,10 +269,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const tableBody = document.querySelector('#balanceSheetTable tbody');
     tableBody.innerHTML = '';
 
-    // 주요 계정 항목 (자산, 부채, 자본)
-    const mainAccounts = balanceSheet.accounts.filter(account => {
-      return ['자산총계', '부채총계', '자본총계'].includes(account.name);
-    });
+    // 필요한 계정 항목 찾기
+    const findAccount = (name) => {
+      return balanceSheet.accounts.find(account => account.name === name);
+    };
+
+    // 주요 계정 데이터 추출
+    const totalAssets = findAccount('자산총계');
+    const totalLiabilities = findAccount('부채총계');
+    const totalEquity = findAccount('자본총계');
+    
+    // 유동/비유동 자산 항목 찾기
+    const currentAssets = findAccount('유동자산');
+    const nonCurrentAssets = findAccount('비유동자산') || {
+      name: '비유동자산',
+      currentAmount: totalAssets.currentAmount - (currentAssets ? currentAssets.currentAmount : 0),
+      previousAmount: totalAssets.previousAmount - (currentAssets ? currentAssets.previousAmount : 0)
+    };
+    
+    // 유동/비유동 부채 항목 찾기
+    const currentLiabilities = findAccount('유동부채');
+    const nonCurrentLiabilities = findAccount('비유동부채') || {
+      name: '비유동부채',
+      currentAmount: totalLiabilities.currentAmount - (currentLiabilities ? currentLiabilities.currentAmount : 0),
+      previousAmount: totalLiabilities.previousAmount - (currentLiabilities ? currentLiabilities.previousAmount : 0)
+    };
+
+    // 모든 주요 계정을 배열로 모으기
+    const mainAccounts = [
+      totalAssets, totalLiabilities, totalEquity,
+      currentAssets, nonCurrentAssets,
+      currentLiabilities, nonCurrentLiabilities
+    ].filter(Boolean);
+
+    // 박스형 시각화 업데이트
+    updateBalanceSheetBoxes(
+      totalAssets, totalLiabilities, totalEquity,
+      currentAssets, nonCurrentAssets,
+      currentLiabilities, nonCurrentLiabilities
+    );
 
     // 주요 계정 테이블에 추가
     mainAccounts.forEach(account => {
@@ -297,13 +332,111 @@ document.addEventListener('DOMContentLoaded', function() {
       tableBody.appendChild(row);
     });
 
-    // 차트 데이터 준비
-    const labels = mainAccounts.map(account => account.name);
-    const currentData = mainAccounts.map(account => account.currentAmount);
-    const previousData = mainAccounts.map(account => account.previousAmount);
+    // 차트 데이터 준비 (자산, 부채, 자본 총계만 차트에 표시)
+    const labels = ['자산총계', '부채총계', '자본총계'];
+    const currentData = [totalAssets.currentAmount, totalLiabilities.currentAmount, totalEquity.currentAmount];
+    const previousData = [totalAssets.previousAmount, totalLiabilities.previousAmount, totalEquity.previousAmount];
 
     // 차트 생성
     renderBalanceSheetChart(labels, currentData, previousData);
+  }
+
+  /**
+   * 재무상태표 박스형 시각화 업데이트
+   * @param {object} totalAssets - 자산총계
+   * @param {object} totalLiabilities - 부채총계
+   * @param {object} equity - 자본총계
+   * @param {object} currentAssets - 유동자산
+   * @param {object} nonCurrentAssets - 비유동자산
+   * @param {object} currentLiabilities - 유동부채
+   * @param {object} nonCurrentLiabilities - 비유동부채
+   */
+  function updateBalanceSheetBoxes(
+    totalAssets, totalLiabilities, equity,
+    currentAssets, nonCurrentAssets,
+    currentLiabilities, nonCurrentLiabilities
+  ) {
+    if (!totalAssets || !totalLiabilities || !equity) {
+      console.warn('재무상태표 박스형 시각화를 위한 데이터가 부족합니다.');
+      return;
+    }
+
+    // 값이 없는 경우 기본값 설정
+    const current_assets = currentAssets ? currentAssets.currentAmount : 0;
+    const non_current_assets = nonCurrentAssets ? nonCurrentAssets.currentAmount : 0;
+    const current_liabilities = currentLiabilities ? currentLiabilities.currentAmount : 0;
+    const non_current_liabilities = nonCurrentLiabilities ? nonCurrentLiabilities.currentAmount : 0;
+    
+    // 자산 총계와 부채 총계
+    const total_assets = totalAssets.currentAmount;
+    const total_liabilities = totalLiabilities.currentAmount;
+    const total_equity = equity.currentAmount;
+
+    // 요약 정보 금액 표시 업데이트
+    document.getElementById('assetAmountSummary').textContent = formatCurrencyShort(total_assets);
+    document.getElementById('liabilityAmountSummary').textContent = formatCurrencyShort(total_liabilities);
+    document.getElementById('equityAmountSummary').textContent = formatCurrencyShort(total_equity);
+
+    // 각 박스의 금액 설정
+    document.getElementById('currentAssetAmount').textContent = formatCurrencyShort(current_assets);
+    document.getElementById('nonCurrentAssetAmount').textContent = formatCurrencyShort(non_current_assets);
+    document.getElementById('currentLiabilityAmount').textContent = formatCurrencyShort(current_liabilities);
+    document.getElementById('nonCurrentLiabilityAmount').textContent = formatCurrencyShort(non_current_liabilities);
+    document.getElementById('equityAmount').textContent = formatCurrencyShort(total_equity);
+
+    // 자산 내에서의 비율 계산
+    const currentAssetPercent = (current_assets / total_assets) * 100;
+    const nonCurrentAssetPercent = (non_current_assets / total_assets) * 100;
+    
+    // 자산 대비 부채와 자본의 비율 계산
+    const currentLiabilityPercent = (current_liabilities / total_assets) * 100;
+    const nonCurrentLiabilityPercent = (non_current_liabilities / total_assets) * 100;
+    const equityPercent = (total_equity / total_assets) * 100;
+
+    // 비율 표시 업데이트
+    document.getElementById('currentAssetPercent').textContent = `${currentAssetPercent.toFixed(1)}%`;
+    document.getElementById('nonCurrentAssetPercent').textContent = `${nonCurrentAssetPercent.toFixed(1)}%`;
+    document.getElementById('currentLiabilityPercent').textContent = `${currentLiabilityPercent.toFixed(1)}%`;
+    document.getElementById('nonCurrentLiabilityPercent').textContent = `${nonCurrentLiabilityPercent.toFixed(1)}%`;
+    document.getElementById('equityPercent').textContent = `${equityPercent.toFixed(1)}%`;
+
+    // 박스 높이 조정
+    // 자산 내에서의 상대적 높이
+    const currentAssetBox = document.getElementById('currentAssetBox');
+    const nonCurrentAssetBox = document.getElementById('nonCurrentAssetBox');
+    
+    // 부채+자본 내에서의 상대적 높이
+    const currentLiabilityBox = document.getElementById('currentLiabilityBox');
+    const nonCurrentLiabilityBox = document.getElementById('nonCurrentLiabilityBox');
+    const equityBox = document.getElementById('equityBox');
+    
+    // 자산 내에서의 비율에 따른 높이 설정
+    const totalAssetHeight = 100; // 퍼센트 단위
+    currentAssetBox.style.height = `${Math.max(currentAssetPercent, 10)}%`;
+    nonCurrentAssetBox.style.height = `${Math.max(nonCurrentAssetPercent, 10)}%`;
+    
+    // 부채+자본 내에서의 비율에 따른 높이 설정
+    const rightSideTotal = total_liabilities + total_equity;
+    const currentLiabilityHeight = (current_liabilities / rightSideTotal) * 100;
+    const nonCurrentLiabilityHeight = (non_current_liabilities / rightSideTotal) * 100;
+    const equityHeight = (total_equity / rightSideTotal) * 100;
+    
+    currentLiabilityBox.style.height = `${Math.max(currentLiabilityHeight, 10)}%`;
+    nonCurrentLiabilityBox.style.height = `${Math.max(nonCurrentLiabilityHeight, 10)}%`;
+    equityBox.style.height = `${Math.max(equityHeight, 10)}%`;
+    
+    // 내부 콘텐츠 중앙 정렬
+    const centerContent = (el) => {
+      el.style.display = 'flex';
+      el.style.flexDirection = 'column';
+      el.style.justifyContent = 'center';
+    };
+    
+    centerContent(currentAssetBox);
+    centerContent(nonCurrentAssetBox);
+    centerContent(currentLiabilityBox);
+    centerContent(nonCurrentLiabilityBox);
+    centerContent(equityBox);
   }
 
   /**

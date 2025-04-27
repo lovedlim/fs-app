@@ -106,4 +106,162 @@ table th {
     margin-left: 0 !important;
     margin-top: 1rem;
   }
+}
+
+/* 재무상태표 박스형 시각화 */
+.balance-sheet-viz {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  min-height: 300px;
+  position: relative;
+  border: 2px solid #343a40;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bs-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+}
+
+.bs-left-box, .bs-right-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.bs-right-box {
+  border-left: 2px solid #343a40;
+}
+
+.bs-box {
+  position: relative;
+  padding: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.bs-box-title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+.bs-box-amount {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.bs-box-percent {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.bs-asset-box {
+  background-color: rgba(54, 162, 235, 0.2);
+  height: 100%;
+}
+
+.bs-current-asset-box {
+  background-color: rgba(54, 162, 235, 0.3);
+  border-bottom: 1px dashed #343a40;
+}
+
+.bs-non-current-asset-box {
+  background-color: rgba(54, 162, 235, 0.1);
+}
+
+.bs-liability-box {
+  background-color: rgba(255, 99, 132, 0.2);
+  border-bottom: 2px solid #343a40;
+}
+
+.bs-current-liability-box {
+  background-color: rgba(255, 99, 132, 0.3);
+  border-bottom: 1px dashed #343a40;
+}
+
+.bs-non-current-liability-box {
+  background-color: rgba(255, 99, 132, 0.1);
+}
+
+.bs-equity-box {
+  background-color: rgba(75, 192, 192, 0.2);
+}
+
+.bs-equal-sign {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: bold;
+  background-color: white;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #343a40;
+  z-index: 1;
+}
+
+/* 박스 외부에 값 표시하기 위한 스타일 */
+.bs-values-summary {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.bs-value-item {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin: 0 5px;
+}
+
+.bs-value-asset {
+  background-color: rgba(54, 162, 235, 0.2);
+  border: 1px solid rgba(54, 162, 235, 0.7);
+}
+
+.bs-value-liability {
+  background-color: rgba(255, 99, 132, 0.2);
+  border: 1px solid rgba(255, 99, 132, 0.7);
+}
+
+.bs-value-equity {
+  background-color: rgba(75, 192, 192, 0.2);
+  border: 1px solid rgba(75, 192, 192, 0.7);
+}
+
+.financial-value {
+  font-weight: bold;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .bs-container {
+    flex-direction: column;
+  }
+  
+  .bs-right-box {
+    border-left: none;
+    border-top: 2px solid #343a40;
+  }
+  
+  .bs-equal-sign {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
 } 

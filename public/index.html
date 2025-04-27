@@ -102,6 +102,56 @@
             </div>
             <div class="card-body">
               <h4 class="card-title"><i class="bi bi-graph-up me-2"></i>재무상태표</h4>
+              
+              <!-- 박스형 재무상태표 시각화 추가 -->
+              <div class="balance-sheet-viz">
+                <div class="bs-container">
+                  <div class="bs-left-box">
+                    <div id="currentAssetBox" class="bs-box bs-current-asset-box">
+                      <div class="bs-box-title">유동자산</div>
+                      <div class="bs-box-amount" id="currentAssetAmount">-</div>
+                      <div class="bs-box-percent" id="currentAssetPercent">-%</div>
+                    </div>
+                    <div id="nonCurrentAssetBox" class="bs-box bs-non-current-asset-box">
+                      <div class="bs-box-title">비유동자산</div>
+                      <div class="bs-box-amount" id="nonCurrentAssetAmount">-</div>
+                      <div class="bs-box-percent" id="nonCurrentAssetPercent">-%</div>
+                    </div>
+                  </div>
+                  <div class="bs-right-box">
+                    <div id="currentLiabilityBox" class="bs-box bs-current-liability-box">
+                      <div class="bs-box-title">유동부채</div>
+                      <div class="bs-box-amount" id="currentLiabilityAmount">-</div>
+                      <div class="bs-box-percent" id="currentLiabilityPercent">-%</div>
+                    </div>
+                    <div id="nonCurrentLiabilityBox" class="bs-box bs-non-current-liability-box">
+                      <div class="bs-box-title">비유동부채</div>
+                      <div class="bs-box-amount" id="nonCurrentLiabilityAmount">-</div>
+                      <div class="bs-box-percent" id="nonCurrentLiabilityPercent">-%</div>
+                    </div>
+                    <div id="equityBox" class="bs-box bs-equity-box">
+                      <div class="bs-box-title">자본총계</div>
+                      <div class="bs-box-amount" id="equityAmount">-</div>
+                      <div class="bs-box-percent" id="equityPercent">-%</div>
+                    </div>
+                  </div>
+                  <div class="bs-equal-sign">=</div>
+                </div>
+              </div>
+              
+              <!-- 값 요약 정보 추가 (박스 밖으로 이동) -->
+              <div class="bs-values-summary">
+                <div class="bs-value-item bs-value-asset">
+                  자산: <span id="assetAmountSummary">-</span>
+                </div>
+                <div class="bs-value-item bs-value-liability">
+                  부채: <span id="liabilityAmountSummary">-</span>
+                </div>
+                <div class="bs-value-item bs-value-equity">
+                  자본: <span id="equityAmountSummary">-</span>
+                </div>
+              </div>
+              
               <div class="row">
                 <div class="col-md-8">
                   <canvas id="balanceSheetChart"></canvas>
